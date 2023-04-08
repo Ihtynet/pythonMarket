@@ -2,8 +2,7 @@
 Интернет магазин
  """
 from flask import Flask, render_template,request
-
-
+import sqlite3
 
 
 app = Flask(__name__)
@@ -16,6 +15,14 @@ def startpage():
         'help': '<a href="/help">Помощь</a>',
              }
     title = "Главная страница магазина"
+
+    conn    = sqlite3.connect("mymarket.db")
+    cursor  = conn.cursor()
+    select_query = """SELECT * from tovary"""
+    cursor.execute(select_query)
+    records = cursor.fetchall()
+    print(records)
+    conn.close()
 
     return render_template("catalog.html", menu=menu)
 
@@ -44,6 +51,9 @@ def help():
    return render_template("catalog.html", menu=menu, title= title)
 
 if __name__ == '__main__':
+
+
     app.run()
 
 #host='0.0.0.0'
+#INSERT INTO tovary (name, price, image) VALUES ("Обувь Адидас", 234.00, "adidas.jpg")
